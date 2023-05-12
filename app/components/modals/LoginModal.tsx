@@ -1,8 +1,8 @@
 'use client';
 
+import { signIn} from "next-auth/react";
 import axios from "axios";
 import { AiFillGithub } from "react-icons/ai";
-import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -13,14 +13,19 @@ import {
 } from "react-hook-form";
 
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
 
 import Modal from "./Modal";
 import Input from "../inputs/Input";
 import Heading from "../Heading";
 import Button from "../Button";
+import { useRouter } from "next/navigation";
 
-const RegisterModal= () => {
+
+const LoginModal= () => {
+  const router = useRouter(); 
   const registerModal = useRegisterModal();
+  const LoginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const { 
@@ -32,7 +37,6 @@ const RegisterModal= () => {
   } = useForm<FieldValues>({
     defaultValues: {
       name: '',
-      email: '',
       password: ''
     },
   });
@@ -40,16 +44,22 @@ const RegisterModal= () => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    axios.post('/api/register', data)
-    .then(() => {
-      toast.success('Thành Công!');
-      registerModal.onClose();
+    signIn('credentials', {
+      ...data,
+      redirect: false,
     })
-    .catch((error) => {
-      toast.error('Chưa thành công!');
-    })
-    .finally(() => {
+    .then((callback) => {
       setIsLoading(false);
+
+      if (callback?.ok) {
+        toast.success('Đăng nhập thành công!');
+        router.refresh();
+        LoginModal.onClose();
+      }
+
+      if(callback?.error) {
+        toast.error(callback.error);
+      }
     })
   }
 
@@ -60,8 +70,8 @@ const RegisterModal= () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading
-        title="Chào mừng bạn đến với Airbnb"
-        subtitle="Đăng ký tài khoản!"
+        title="Chào Mừng Bạn Đến Với Airbnb"
+        subtitle="Đăng nhập tài khoản!"
       />
       <Input
         id="email"
@@ -72,16 +82,8 @@ const RegisterModal= () => {
         required
       />
       <Input
-        id="name"
-        label="Tên Người Dùng"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
         id="password"
-        label="Mật Khẩu"
+        label="Password"
         type="password"
         disabled={isLoading}
         register={register}
@@ -96,13 +98,13 @@ const RegisterModal= () => {
       <hr />
       <Button 
         outline 
-        label="Tiếp tục với Google"
+        label="Continue with Google"
         icon={FcGoogle}
         onClick={() => signIn('google')} 
       />
       <Button 
         outline 
-        label="Tiếp tục với Github"
+        label="Continue with Github"
         icon={AiFillGithub}
         onClick={() => signIn('github')}
       />
@@ -114,7 +116,7 @@ const RegisterModal= () => {
           font-light
         "
       >
-        <p>Bạn đã có tài khoản?
+        <p>Already have an account?
           <span 
             onClick={onToggle} 
             className="
@@ -122,7 +124,7 @@ const RegisterModal= () => {
               cursor-pointer 
               hover:underline
             "
-            > Đăng Nhập</span>
+            > Log in</span>
         </p>
       </div>
     </div>
@@ -131,10 +133,10 @@ const RegisterModal= () => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={registerModal.isOpen}
-      title="Đăng ký"
-      actionLabel="Tiếp tục"
-      onClose={registerModal.onClose}
+      isOpen={LoginModal.isOpen}
+      title="Đăng Nhập"
+      actionLabel="Tiếp Tục"
+      onClose={LoginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
@@ -142,4 +144,4 @@ const RegisterModal= () => {
   );
 }
 
-export default RegisterModal;
+export default LoginModal;

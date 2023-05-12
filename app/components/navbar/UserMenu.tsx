@@ -5,9 +5,11 @@ import Avartar from '../Avartar';
 import { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
+import useLoginModal from '@/app/hooks/useLoginModal';
 
 const UserMenu = () => {
     const registerModal = useRegisterModal();
+    const LoginModal = useLoginModal();
     const [isOpen, setIsOpen] = useState(false);
     const toggleOpen = useCallback(() => {
         setIsOpen((value) => !value);
@@ -35,7 +37,7 @@ const UserMenu = () => {
                         <div className='flex flex-col cursor-pointer'>
                             <>
                                 <MenuItem
-                                    onClick={() => {}}
+                                    onClick={LoginModal.onOpen}
                                     label="Đăng Nhập"
                                 />
                                 <MenuItem
