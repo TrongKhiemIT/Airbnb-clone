@@ -36,7 +36,7 @@ const LoginModal= () => {
     },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: '',
+      email: '',
       password: ''
     },
   });
@@ -64,8 +64,9 @@ const LoginModal= () => {
   }
 
   const onToggle = useCallback(() => {
-    registerModal.onClose();
-  }, [registerModal])
+    LoginModal.onClose();
+    registerModal.onOpen();
+  }, [LoginModal, registerModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -83,7 +84,7 @@ const LoginModal= () => {
       />
       <Input
         id="password"
-        label="Password"
+        label="Mật khẩu"
         type="password"
         disabled={isLoading}
         register={register}
@@ -98,13 +99,13 @@ const LoginModal= () => {
       <hr />
       <Button 
         outline 
-        label="Continue with Google"
+        label="Tiếp tục với Google"
         icon={FcGoogle}
         onClick={() => signIn('google')} 
       />
       <Button 
         outline 
-        label="Continue with Github"
+        label="Tiếp tục với Github"
         icon={AiFillGithub}
         onClick={() => signIn('github')}
       />
@@ -116,7 +117,7 @@ const LoginModal= () => {
           font-light
         "
       >
-        <p>Already have an account?
+        <p>First time using Airbnb?
           <span 
             onClick={onToggle} 
             className="
@@ -124,7 +125,7 @@ const LoginModal= () => {
               cursor-pointer 
               hover:underline
             "
-            > Log in</span>
+            > Create an account</span>
         </p>
       </div>
     </div>

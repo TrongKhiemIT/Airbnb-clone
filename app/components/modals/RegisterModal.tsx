@@ -18,9 +18,12 @@ import Modal from "./Modal";
 import Input from "../inputs/Input";
 import Heading from "../Heading";
 import Button from "../Button";
+import LoginModal from "./LoginModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
 
 const RegisterModal= () => {
   const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const { 
@@ -55,7 +58,8 @@ const RegisterModal= () => {
 
   const onToggle = useCallback(() => {
     registerModal.onClose();
-  }, [registerModal])
+    loginModal.onOpen();
+  }, [loginModal, registerModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
