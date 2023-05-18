@@ -27,12 +27,15 @@ const CategoryInput: React.FC<CategoryInputProps> = ({
                 hover:border-black
                 transition
                 cursor-pointer
-                ${selected ? 'border-black' : ''}
-            `}
+                ${selected ? 'border-black' : 'border-neutral-200'}
+        `}
         >
-
+            <Icon size={30} />
+            <div className="font-semibold ">
+                {label}
+            </div>
         </div>
      );
 }
- 
+
 export default CategoryInput;
