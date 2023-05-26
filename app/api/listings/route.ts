@@ -46,4 +46,6 @@ export async function POST(
             userId:currentUser.id
         }
     })
+
+    return NextResponse.json(listing);
 }

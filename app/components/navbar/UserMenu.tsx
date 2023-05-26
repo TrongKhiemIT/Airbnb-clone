@@ -1,7 +1,7 @@
 'use client';
 
 import { AiOutlineMenu } from 'react-icons/ai';
-import Avartar from '../Avartar';
+import Avartar from '../Avatar';
 import { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
